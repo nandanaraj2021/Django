@@ -1,6 +1,6 @@
 from django.forms.fields import DateTimeField
 from django.shortcuts import redirect, render
-from .forms import EntryForm, TopicForm
+from .forms import TopicForm, EntryForm
 from .models import Topic, Entry
 
 # Create your views here.
@@ -34,7 +34,7 @@ def new_topic(request):
         if form.is_valid():
             form.save()
 
-            return redirect('MainApp:Topics')
+            return redirect('MainApp:topics')
 
     context = {'form':form}
     return render(request, 'MainApp/new_topic.html', context)
@@ -50,7 +50,7 @@ def new_entry(request, topic_id):
             new_entry = form.save(commit=False)
             new_entry.topic = topic
             new_entry.save()
-            return redirect('MainApp:Topics',topic_id=topic_id)
+            return redirect('MainApp:topic',topic_id=topic_id)
 
     context = {'form':form, 'topic':topic}
     return render(request, 'MainApp/new_entry.html', context)

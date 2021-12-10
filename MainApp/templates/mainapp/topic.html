@@ -5,21 +5,23 @@
 <p>Topic: {{ topic }}</p>
 
 <ul>
-    {% for entry in entries %}
+    {% for e in entries %}
     <li>
         <!-- a vertical line (|) represents a template filter
         - a function that modifies the value in a template variable  -->
-        <p>{{entry.text|linebreaks }}</p>
-        <p>{{entry.date_added|date:'M d, H:i'}}</p>
+        <p>{{e.text|linebreaks }}</p>
+        <p>{{e.date_added|date:'M d, H:i'}}</p>
         <!-- The filter linebreaks ensures that long text entries include line breaks  -->
         <p>
-            <a href="{% url 'MainApp:edit_entry' entry.id %}">Edit entry</a>
+            <a href="{% url 'MainApp:edit_entry' e.id %}">Edit entry</a>
         </p>
     </li>
+
     {% empty %}
-    
     <li>There are no entries for this topic yet.</li>
+
     {% endfor %}
+
 </ul>
 
 <p>
