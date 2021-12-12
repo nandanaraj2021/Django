@@ -2,6 +2,7 @@ from django.forms.fields import DateTimeField
 from django.shortcuts import redirect, render
 from .forms import TopicForm, EntryForm
 from .models import Topic, Entry
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -9,14 +10,16 @@ def index(request):
     #post: positing information to the database
     return render(request, 'MainApp/index.html')
 
+@login_required
 def topics(request):
-    topics = Topic.objects.order_by('date_added')
+    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
     #'-' before date added means ascending
 
     context = {'topics':topics}
 
     return render(request, 'MainApp/topics.html', context)
 
+@login_required
 def topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
 
@@ -26,6 +29,7 @@ def topic(request, topic_id):
 
     return render(request, 'MainApp/topic.html', context)
 
+@login_required
 def new_topic(request):
     if request.method != 'POST':
         form = TopicForm()
@@ -39,6 +43,7 @@ def new_topic(request):
     context = {'form':form}
     return render(request, 'MainApp/new_topic.html', context)
 
+@login_required
 def new_entry(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     if request.method != 'POST':
@@ -55,6 +60,7 @@ def new_entry(request, topic_id):
     context = {'form':form, 'topic':topic}
     return render(request, 'MainApp/new_entry.html', context)
 
+@login_required
 def edit_entry(request, entry_id):
     #edit an existing entry
     entry = Entry.objects.get(id=entry_id)
